@@ -19,12 +19,12 @@
 				<md-button hide-gt-xs class="md-icon-button" ng-click="openSideNav()" aria-label="Add to Queue">
 					<md-icon class="material-icons">playlist_add</md-icon>
 				</md-button>
-				<h1 class="md-flex">HeyJuke</h1>
+				<h1 class="md-flex">Parlor Juke</h1>
 			</div>
 		</md-toolbar>
 
 		<md-content flex  layout="row">
-		    <md-sidenav 
+		    <md-sidenav
 		    	flex="33"
 		    	class="md-sidenav-left"
 		    	md-component-id="add"
@@ -120,7 +120,7 @@
 				<ng-include src="'songPartial.html'" ng-repeat="x in [nowPlaying]"></ng-include>
 
 				<md-content flex class="main-content md-hue-1" layout="column">
-					
+
 					<ng-include src="'songPartial.html'" ng-repeat="x in queue"></ng-include>
 
 				<md-content>
