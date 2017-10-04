@@ -1,15 +1,20 @@
 import os, json, socket, threading, pygame, time, spotipy, socketserver
 from http.server import *
+from flask import Flask, request
+from flask_restful import Resource, Api
+from json import dumps
 
 dirName = os.path.dirname(os.path.abspath(__file__))
 
-class PlayerModel:
+class PlayerModel():
 	def __init__(self):
 		self.queue = []
 		self.currentlyPlaying = []
 		self.playingStarted = 0
 	def pop(self):
 		self.currentlyPlaying = self.queue.pop()
+	def get(self):
+		return dumps({0: self.currentlyPlaying, 1:self.queue, 2:self.playingStarted})
 
 pygame.mixer.init()
 spotify = spotipy.Spotify()
@@ -37,10 +42,10 @@ def playQueue():
 
 
 def socketListener():
-	print("Network thread started...")
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.bind(("localhost",15000))
 	s.listen(1)
+	print("Network thread started...")
 	while(True):
 		connection, sender = s.accept()
 		try:
@@ -59,29 +64,37 @@ def socketListener():
 			connection.close()
 
 def httpServe():
-	print("Server thread started...")
 	PORT = 8000
 
 	Handler = SimpleHTTPRequestHandler
 
 	httpd = socketserver.TCPServer(("localhost", PORT), Handler)
+	print("Server thread started...")
 	httpd.serve_forever()
 
+def api():
+	app = Flask(__name__)
+
+	@app.route("/player")
+	def player():
+		return model.get()
+
+	app.run(port='5002')
+
 socketThread = threading.Thread(target = socketListener)
-
 playerThread = threading.Thread(target = playQueue)
-
 serverThread = threading.Thread(target = httpServe)
+apiThread = threading.Thread(target = api)
 
 socketThread.daemon = True
 playerThread.daemon = True
 serverThread.daemon = True
+apiThread.daemon - True
 
 playerThread.start()
 socketThread.start()
 serverThread.start()
-
-print("Ready")
+apiThread.start()
 
 while(True):
 	x = input()
