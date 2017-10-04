@@ -1,10 +1,5 @@
-import os
-import json
-import socket
-import threading
-import pygame
-import time
-import spotipy
+import os, json, socket, threading, pygame, time, spotipy, socketserver
+from http.server import *
 
 dirName = os.path.dirname(os.path.abspath(__file__))
 
@@ -63,15 +58,29 @@ def socketListener():
 		finally:
 			connection.close()
 
+def httpServe():
+	print("Server thread started...")
+	PORT = 8000
+
+	Handler = SimpleHTTPRequestHandler
+
+	httpd = socketserver.TCPServer(("localhost", PORT), Handler)
+	httpd.serve_forever()
+
 socketThread = threading.Thread(target = socketListener)
 
 playerThread = threading.Thread(target = playQueue)
 
+serverThread = threading.Thread(target = httpServe)
+
 socketThread.daemon = True
 playerThread.daemon = True
+serverThread.daemon = True
 
 playerThread.start()
 socketThread.start()
+serverThread.start()
+
 print("Ready")
 
 while(True):
