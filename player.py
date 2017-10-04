@@ -43,29 +43,6 @@ def playQueue():
 		else:
 			model.currentlyPlaying = None
 
-
-def socketListener():
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.bind(("localhost",15000))
-	s.listen(1)
-	print("Network thread started...")
-	while(True):
-		connection, sender = s.accept()
-		try:
-			data = connection.recv(256)
-			data = data.decode("utf-8")
-			if("add=" in data):
-				start = data.index("add=")
-				print("Someone added: " + data[(start+4):])
-				model.queue.insert(0, ["file", data[(start+4):]])
-			if data:
-				connection.sendall(
-					bytes(
-						json.dumps([model.currentlyPlaying, list(reversed(model.queue)), model.playingStarted]),
-						'utf8'))
-		finally:
-			connection.close()
-
 def httpServe():
 	PORT = 8000
 
@@ -84,18 +61,15 @@ def api():
 
 	app.run(port='5002')
 
-socketThread = threading.Thread(target = socketListener)
 playerThread = threading.Thread(target = playQueue)
 serverThread = threading.Thread(target = httpServe)
 apiThread = threading.Thread(target = api)
 
-socketThread.daemon = True
 playerThread.daemon = True
 serverThread.daemon = True
-apiThread.daemon - True
+apiThread.daemon = True
 
 playerThread.start()
-socketThread.start()
 serverThread.start()
 apiThread.start()
 
