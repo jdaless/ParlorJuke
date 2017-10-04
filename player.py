@@ -27,7 +27,7 @@ def playQueue():
 			model.pop()
 			if(model.currentlyPlaying[0] == "file"):
 				try:
-					pygame.mixer.music.load(dirName + '\\music\\' + model.currentlyPlaying[1])
+					pygame.mixer.music.load(dirName + '/music/' + model.currentlyPlaying[1])
 					pygame.mixer.music.play()
 					model.playingStarted = time.mktime(time.localtime())
 					while(pygame.mixer.music.get_busy()):
@@ -58,7 +58,7 @@ def socketListener():
 			if data:
 				connection.sendall(
 					bytes(
-						json.dumps([model.currentlyPlaying, list(reversed(model.queue)), model.playingStarted]), 
+						json.dumps([model.currentlyPlaying, list(reversed(model.queue)), model.playingStarted]),
 						'utf8'))
 		finally:
 			connection.close()
@@ -77,14 +77,14 @@ print("Ready")
 while(True):
 	x = input()
 	if(x=="break"):
-		break 
+		break
 	if(x=="queue"):
 		print(list(reversed(model.queue)))
 	if(x=="playing"):
 		print(model.currentlyPlaying)
 	if(x=="library"):
-		print(os.listdir(dirName + "\\music"))
+		print(os.listdir(dirName + "/music"))
 	if(x=="spotify"):
 		model.queue.insert(0, ["spotify", "https://play.spotify.com/track/6t1FIJlZWTQfIZhsGjaulM"])
-	#if(x.startswith("add")):
-	#	model.queue.insert(0, ["file", x[4:]])
+	if(x.startswith("add")):
+		model.queue.insert(0, ["file", x[4:]])

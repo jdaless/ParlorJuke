@@ -11,6 +11,7 @@
 		<link rel="stylesheet" href="styles.css">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<title>Parlor Juke</title>
 	</head>
 
 	<body ng-app="player" ng-controller="AddMenu" layout="column">
@@ -111,11 +112,11 @@
 			    <span layout-margin>
 				    {{message}}
 				</span>
-		    </md-sidenav>
+	    </md-sidenav>
 
 
 
-		    <md-content ng-controller="Queue" layout="column" class="md-hue-1" flex>
+	    <md-content ng-controller="Queue" layout="column" class="md-hue-1" flex>
 
 				<ng-include src="'songPartial.html'" ng-repeat="x in [nowPlaying]"></ng-include>
 
