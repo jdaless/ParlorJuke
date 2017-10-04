@@ -29,13 +29,16 @@ def playQueue():
 				try:
 					pygame.mixer.music.load(dirName + '/music/' + model.currentlyPlaying[1])
 					pygame.mixer.music.play()
+					# This is necessary because of the failures of the pygame module
+					# sometimes it doesn't play without a second call
+					pygame.mixer.music.play()
 					model.playingStarted = time.mktime(time.localtime())
 					while(pygame.mixer.music.get_busy()):
 						continue
 
 				except pygame.error:
 					print("Error loading file")
-			if(model.currentlyPlaying[0] == "spotify"):
+			elif(model.currentlyPlaying[0] == "spotify"):
 				spotify.play(model.currentlyPlaying[1])
 		else:
 			model.currentlyPlaying = None
@@ -110,3 +113,4 @@ while(True):
 		model.queue.insert(0, ["spotify", "https://play.spotify.com/track/6t1FIJlZWTQfIZhsGjaulM"])
 	if(x.startswith("add")):
 		model.queue.insert(0, ["file", x[4:]])
+		print(model.queue)
