@@ -4,11 +4,12 @@ app.controller('Queue', function($scope, $rootScope, $http, $interval) {
 	$queueRefreshed = false;
 	$scope.progress = 0;
 	function refreshQueue(){
-		$http.get("localhost:5002/player").then(function(response) {
+		$http.get("api/player").then(function(response) {
 	        $fullQueue = response.data;
 				$scope.nowPlaying = $fullQueue[0];
 				$scope.queue = $fullQueue[1];
 				$scope.started = $fullQueue[2];
+				console.log($fullQueue)
 				$queueRefreshed = true;
 	    });
 	}
