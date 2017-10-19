@@ -1,4 +1,4 @@
-import os, json, socket, threading, pygame, time, spotipy, socketserver
+import os, json, socket, threading, pygame, time, spotipy, socketserver, lib.song
 from http.server import *
 from json import dumps
 
@@ -12,9 +12,13 @@ class PlayerModel():
 	def pop(self):
 		self.currentlyPlaying = self.queue.pop()
 	def get(self):
-		# TODO: Instead of using the type-path tuples, 
-		#		return the metadata of the songs
-		return bytes(json.dumps([self.currentlyPlaying, list(reversed(self.queue)), self.playingStarted]), 'utf8')
+		queueid3 = []
+		currentid3 = lib.song.getData(dirName, self.currentlyPlaying)
+		currentid3['nowPlaying'] = True
+		for element in self.queue:
+			queueid3.insert(0, lib.song.getData(dirName, element))
+		print(currentid3)
+		return bytes(json.dumps([currentid3, queueid3, self.playingStarted]), 'utf8')
 
 pygame.mixer.init()
 spotify = spotipy.Spotify()
