@@ -3,8 +3,8 @@ A home wifi jukebox
 
 ## Features to Implement
 
-* Overhaul into python server
 * Add YouTube videos to queue
+* Sign into Spotify and add Spotify songs to queue
 * MySQL database for library file management
 * Searching the library
 * Album art
